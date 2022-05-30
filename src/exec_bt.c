@@ -20,6 +20,12 @@ bool check_sep(exec_bt_t *left, exec_bt_t *right)
 
 bool exec_sep(exec_bt_t *left, exec_bt_t *right, char *sep)
 {
+    if (!my_strcmp(sep, ";")) {
+        if (!exec_bt(left))
+            return false;
+        if (!exec_bt(right))
+            return false;
+    }
     if (!check_sep(left, right))
         return false;
     if (!my_strcmp(sep, "&&"))
@@ -33,16 +39,11 @@ bool exec_bt(exec_bt_t *node)
 {
     if (!node)
         return true;
-    if (node->sep && !my_strcmp(node->sep, ";")) {
-        if (node->left && !exec_bt(node->left))
-            return false;
-        if (node->right && !exec_bt(node->right))
-            return false;
-    } else if (node->sep)
+    if (node->sep)
         return exec_sep(node->left, node->right, node->sep);
     if (!node->command)
-        return true;
+        return false;
     if (!*(node->command))
-        return true;
+        return false;
     return builtin_classify(node->command);
 }

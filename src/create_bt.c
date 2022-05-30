@@ -19,7 +19,7 @@ void divide_branch(exec_bt_t *node, char *sep)
     node->sep = my_strmalloc(2);
     node->sep[0] = *sep;
     node->right->command = my_cleanstr(sep + 1);
-    if (*(sep + 1) == *sep &&
+    if (sep[1] == *sep &&
     (*sep == '>' || *sep == '<' || *sep == '|' || *sep == '&')) {
         node->sep[1] = node->sep[0];
         node->right->command = my_cleanstr(node->right->command + 1);
@@ -50,8 +50,10 @@ void create_branches(exec_bt_t *node)
 
 exec_bt_t *create_bt(char *input)
 {
-    exec_bt_t *root = (exec_bt_t *)malloc(sizeof(exec_bt_t));
+    exec_bt_t *root = check_malloc(sizeof(exec_bt_t));
 
+    if (!root)
+        return NULL;
     root->sep = NULL;
     root->command = my_cleanstr(input);
     create_branches(root);

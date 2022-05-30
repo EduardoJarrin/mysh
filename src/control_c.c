@@ -20,6 +20,7 @@ bool init_minishell(void)
     extern char **__environ;
 
     signal(SIGINT, &interrupt_handler);
+    signal(SIGTSTP, &interrupt_handler);
     __environ = my_arrdup(__environ);
     if (!__environ)
         return false;

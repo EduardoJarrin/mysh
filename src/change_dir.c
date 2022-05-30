@@ -5,7 +5,6 @@
 ** change directory
 */
 
-#include <dirent.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <sys/stat.h>
@@ -33,9 +32,9 @@ void cd_path(char *path)
 char *cd_special_paths(char *path)
 {
     if (!my_strcmp(path, "~"))
-        return get_env_value("OLDPWD");
+        return get_env_value("HOME");
     if (!my_strcmp(path, "-"))
-        return get_env_value("PWD");
+        return get_env_value("OLDPWD");
     return path;
 }
 

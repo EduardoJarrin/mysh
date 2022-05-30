@@ -7,10 +7,6 @@
 
 LIB_DIR = lib
 
-TESTS_DIR = tests
-
-TESTS_EXE	= tester.sh
-
 LDFLAGS	=	-L$(LIB_DIR) -lmy
 
 CFLAGS	=	-W -Werror -Wall -Wextra
@@ -31,14 +27,10 @@ binary:	library	$(OBJ)
 	gcc -o $(NAME) $(OBJ) $(LDFLAGS)
 
 debugging:
-	gcc -g3 -o $(NAME) $(SRC) $(wildcard lib/my/src/*.c) $(CFLAGS)
+	gcc -g3 -o $(NAME) $(SRC) $(wildcard lib/*/src/*.c) $(CFLAGS)
 
 library:
 	@cd $(LIB_DIR) && make
-
-tests_run:	all
-	@cp $(NAME) $(TESTS_DIR)
-	@cd $(TESTS_DIR) && ./$(TESTS_EXE)
 
 clean:
 	rm -f $(OBJ)
