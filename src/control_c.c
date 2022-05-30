@@ -8,11 +8,13 @@
 #include <signal.h>
 #include <unistd.h>
 #include "libmy.h"
+#include "minishell.h"
 
 void interrupt_handler(int signal)
 {
     (void)signal;
     write(1, "\n", 1);
+    display_prompt();
 }
 
 bool init_minishell(void)

@@ -24,6 +24,7 @@
     bool builtin_classify(char *input);
     bool change_dir(char **command, int len);
     exec_bt_t *create_bt(char *input);
+    void display_prompt(void);
     bool exec_program(char **command, int len);
     bool exit_sh(char **environ, int exit_status);
     char *get_env_value(char *var);
