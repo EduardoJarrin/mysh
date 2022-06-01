@@ -8,6 +8,8 @@
 #ifndef MINISHELL_H
     #define MINISHELL_H
 
+    #include <stdbool.h>
+
     typedef struct exec_bt_s {
         char *sep;
         char *command;

@@ -10,7 +10,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "libmy.h"
-#include "minishell.h"
+#include "mysh.h"
 
 builtins_t builtins[5] = {
     {"cd", &change_dir},
@@ -36,7 +36,7 @@ bool builtin_classify(char *input)
         return print_env();
     if (!my_strcmp(input, "cd"))
         input = my_strdup("cd ~");
-    command = my_str_to_word_array(input, ' ');
+    command = my_stoa(input, ' ');
     if (!command)
         return false;
     len = my_arrlen(command);
@@ -68,14 +68,16 @@ void display_prompt(void)
 
     if (home && path && !my_strncmp(home, path, home_length)) {
         my_putstr("~");
-        path += home_length;
+        my_putstr(path + home_length);
+    } else {
+        my_putstr(path);
     }
-    my_putstr(path);
     my_putstr((path && user ? " | " : NULL));
     my_putstr(user);
     my_putstr((!path && !user ? "$" : NULL));
     my_putstr(" > ");
 }
+
 void print_tree(exec_bt_t *root)
 {
     if (!root)

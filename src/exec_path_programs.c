@@ -9,12 +9,12 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include "libmy.h"
-#include "minishell.h"
+#include "mysh.h"
 
 char *get_program_path(char *program)
 {
     char *path = get_env_value("PATH");
-    char **paths = my_str_to_word_array(my_strdup(path), ':');
+    char **paths = my_stoa(my_strdup(path), ':');
     char *attempt = NULL;
     char *program_path = my_strcat("/", program);
 
@@ -29,6 +29,8 @@ char *get_program_path(char *program)
     if (access(program, F_OK) == 0)
         return program;
     free(program_path);
+    my_perror(program);
+    my_perror(": Command not found.\n");
     return NULL;
 }
 
@@ -58,11 +60,8 @@ bool exec_program(char **command, int len)
 
     if (!command || len == 0)
         return false;
-    if (!(path = get_program_path(command[0]))) {
-        my_perror(command[0]);
-        my_perror(": Command not found.\n");
+    if (!(path = get_program_path(command[0])))
         return false;
-    }
     if (access(path, X_OK) == -1 || is_dir(path)) {
         my_perror(path);
         my_perror(": Permission denied.\n");

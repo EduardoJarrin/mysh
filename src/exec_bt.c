@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include "libmy.h"
-#include "minishell.h"
+#include "mysh.h"
 
 bool check_sep(exec_bt_t *left, exec_bt_t *right)
 {

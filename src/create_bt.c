@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include "libmy.h"
-#include "minishell.h"
+#include "mysh.h"
 
 void create_branches(exec_bt_t *node);
 

@@ -32,6 +32,12 @@ debugging:
 library:
 	@cd $(LIB_DIR) && make
 
+tests_run:
+	@cd tests && make
+
+cov:
+	@cd tests && make html-details
+
 clean:
 	rm -f $(OBJ)
 	@cd $(LIB_DIR) && make clean
@@ -40,5 +46,6 @@ fclean:	clean
 	rm -f $(NAME)
 	rm -f -r $(FOLDER)
 	@cd $(LIB_DIR) && make fclean
+	@cd tests && make fclean
 
 re:	fclean	all
