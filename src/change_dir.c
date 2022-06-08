@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include "libmy.h"
-#include "minishell.h"
+#include "mysh.h"
 
 void cd_path(char *path)
 {
@@ -33,8 +33,10 @@ char *cd_special_paths(char *path)
 {
     if (!my_strcmp(path, "~"))
         return get_env_value("HOME");
-    if (!my_strcmp(path, "-"))
-        return get_env_value("OLDPWD");
+    if (!my_strcmp(path, "-")) {
+        path = get_env_value("OLDPWD");
+        my_printf("%s\n", path);
+    }
     return path;
 }
 

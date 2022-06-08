@@ -8,12 +8,12 @@
 #include <signal.h>
 #include <unistd.h>
 #include "libmy.h"
-#include "minishell.h"
+#include "mysh.h"
 
 void interrupt_handler(int signal)
 {
     (void)signal;
-    write(1, "\n", 1);
+    my_putchar('\n');
     display_prompt();
 }
 

@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include "libmy.h"
-#include "minishell.h"
+#include "mysh.h"
 
 bool print_env(void)
 {
@@ -36,6 +36,8 @@ void unset_env_var(char *key)
 
 bool unset_env(char **command, int len)
 {
+    if (!command)
+        return false;
     if (len == 1) {
         my_perror("unsetenv: Too few arguments.\n");
         return false;

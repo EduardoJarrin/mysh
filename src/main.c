@@ -6,7 +6,7 @@
 */
 
 #include "libmy.h"
-#include "minishell.h"
+#include "mysh.h"
 
 int main(int ac, char **av)
 {
