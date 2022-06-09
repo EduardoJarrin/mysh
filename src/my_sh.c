@@ -20,10 +20,13 @@ builtins_t builtins[5] = {
     {NULL, NULL}
 };
 
-bool exit_sh(char **environ, int exit_status)
+bool exit_sh(char **arr, int exit_status)
 {
+    extern char **__environ;
+
     my_putstr("exit\n");
-    free_arr(environ);
+    free_arr(__environ);
+    free(arr);
     exit(exit_status);
 }
 
@@ -34,10 +37,7 @@ bool builtin_classify(char *input)
 
     if (!my_strcmp(input, "env"))
         return print_env();
-    if (!my_strcmp(input, "cd"))
-        input = my_strdup("cd ~");
-    command = my_stoa(input, ' ');
-    if (!command)
+    if (!(command = my_stoa(input, ' ')))
         return false;
     len = my_arrlen(command);
     if (len <= 0)
@@ -78,35 +78,14 @@ void display_prompt(void)
     my_putstr(" > ");
 }
 
-void print_tree(exec_bt_t *root)
-{
-    if (!root)
-        return;
-    if (root->sep)
-        my_printf("Operator: %s\n", root->sep);
-    if (root->command)
-        my_printf("Command: %s\n", root->command);
-    if (root->left) {
-        my_printf("Left:\n");
-        print_tree(root->left);
-    }
-    if (root->right) {
-        my_printf("Right:\n");
-        print_tree(root->right);
-    }
-}
-
 void my_sh(void)
 {
-    exec_bt_t *root = NULL;
-
     for (char *input = NULL; true;) {
         display_prompt();
         if (!(input = get_input(input)))
             break;
         if (*input == '\0')
             continue;
-        root = create_bt(input);
-        exec_bt(root);
+        exec_input(input);
     }
 }

@@ -14,6 +14,7 @@ HTML	=	coverage
 LIB_DIR	= $(realpath ../lib)
 
 BIN_SRC	=	$(wildcard ../src/*.c)
+BIN_SRC	+=	$(wildcard ../src/*/*.c)
 BIN_SRC	:=	$(filter-out ../src/main.c, $(BIN_SRC))
 
 CCTMP	=	$(BIN_SRC:.c=.gcno) $(BIN_SRC:.c=.gcda) $(BIN_SRC:.c=.gcov) \
@@ -36,6 +37,7 @@ run:	tests
 	./$(TEST)
 
 html-details: run
+	rm $(TEST)-test-*
 	gcovr -r .. --html-details -o $(HTML).html
 
 clean:

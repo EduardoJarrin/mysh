@@ -13,20 +13,25 @@
 
 void cd_path(char *path)
 {
-    char **arr = check_malloc(sizeof(char *) * 4);
+    char *str = my_strdup("setenv OLDPWD ");
+    char **arr = my_stoa(str, ' ');
+    char *pwd = NULL;
 
     if (!arr)
         return;
-    arr[0] = "setenv";
-    arr[1] = "OLDPWD";
-    arr[2] = getcwd(NULL, 0);
-    arr[3] = NULL;
+    pwd = getcwd(NULL, 0);
+    arr[2] = pwd;
     chdir(path);
     set_env(arr, 3);
-    arr[1] = "PWD";
-    arr[2] = getcwd(NULL, 0);
+    free(str);
+    free(pwd);
+    str = my_strdup("setenv PWD ");
+    arr = my_stoa(str, ' ');
+    pwd = getcwd(NULL, 0);
+    arr[2] = pwd;
     set_env(arr, 3);
-    free(arr);
+    free(str);
+    free(pwd);
 }
 
 char *cd_special_paths(char *path)
@@ -44,8 +49,9 @@ bool change_dir(char **command, int len)
 {
     struct stat statbuf;
     int err = 0;
-    char *path = command[1];
+    char *path = (len == 1 ? "~" : command[1]);
 
+    free(command);
     if (len > 2) {
         my_perror("cd: Too many arguments.\n");
         return false;
@@ -53,10 +59,7 @@ bool change_dir(char **command, int len)
     path = cd_special_paths(path);
     if ((err += stat(path, &statbuf)) == -1 || !(err += is_dir(path))) {
         my_perror(path);
-        if (err == -1)
-            my_perror(": No such file or directory.\n");
-        else
-            my_perror(": Not a directory.\n");
+        my_perror((err == -1) ? CD_NO_FILE_DIR : CD_NOT_DIR);
         return false;
     }
     cd_path(path);
