@@ -47,7 +47,7 @@ char **my_arrmalloc(int len)
 
     if (!arr)
         return NULL;
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i <= len; i++)
         arr[i] = NULL;
     return arr;
 }
@@ -58,7 +58,7 @@ int *my_intmalloc(int len)
 
     if (!arr)
         return NULL;
-    for (int i = 0; i < len; i++)
+    for (int i = 0; i <= len; i++)
         arr[i] = 0;
     return arr;
 }

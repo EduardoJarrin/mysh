@@ -22,14 +22,14 @@ char *read_file(char *str)
     stat(str, &buf);
     file = my_strmalloc(buf.st_size);
     if (file == NULL)
-        return (NULL);
+        return NULL;
     fd = open(str, O_RDONLY);
     if (fd == -1 || read(fd, file, buf.st_size) == -1) {
         my_perror("Could not open/read file\n");
         free(file);
-        return (NULL);
+        return NULL;
     }
-    return (file);
+    return file;
 }
 
 char *read_line(FILE *stream)

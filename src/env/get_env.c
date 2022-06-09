@@ -16,7 +16,7 @@ char *get_env_key(char *key)
 
     if (!__environ)
         return NULL;
-    key = my_strcat(key, "=");
+    key = my_strdupcat(key, "=");
     if (!key)
         return NULL;
     for (int i = 0; __environ[i]; i++)
@@ -35,7 +35,7 @@ char *get_env_value(char *var)
 
     if (!__environ)
         return NULL;
-    var = my_strcat(var, "=");
+    var = my_strdupcat(var, "=");
     for (int i = 0; __environ[i]; i++)
         if (!my_strncmp(__environ[i], var, len)) {
             free(var);

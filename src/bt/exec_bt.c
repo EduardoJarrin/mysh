@@ -9,13 +9,15 @@
 #include "libmy.h"
 #include "mysh.h"
 
-bool check_sep(exec_bt_t *left, exec_bt_t *right)
+bool check_sep(exec_bt_t *left, exec_bt_t *right, char sep)
 {
-    if (!*(left->command) || !*(right->command)) {
-        my_perror("Invalid null command.\n");
-        return false;
-    }
-    return true;
+    if ((left->sep || left->command[0]) && (right->sep || right->command[0]))
+        return true;
+    if (sep == '&' &&
+    ((right->sep || right->command[0]) || !(left->sep || left->command[0])))
+        return true;
+    my_perror((sep == '<' || sep == '>') ? REDIRECT_ERROR : NULL_COMMAND);
+    return false;
 }
 
 bool exec_sep(exec_bt_t *left, exec_bt_t *right, char *sep)
@@ -26,7 +28,7 @@ bool exec_sep(exec_bt_t *left, exec_bt_t *right, char *sep)
         if (!exec_bt(right))
             return false;
     }
-    if (!check_sep(left, right))
+    if (!check_sep(left, right, sep[0]))
         return false;
     if (!my_strcmp(sep, "&&"))
         return exec_bt(left) && exec_bt(right);

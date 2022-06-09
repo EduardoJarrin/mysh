@@ -11,24 +11,34 @@
 #include "libmy.h"
 #include "mysh.h"
 
+bool free_command_return(char **command, bool return_value)
+{
+    free(command);
+    return return_value;
+}
+
 char *get_program_path(char *program)
 {
     char *path = get_env_value("PATH");
     char **paths = my_stoa(my_strdup(path), ':');
     char *attempt = NULL;
-    char *program_path = my_strcat("/", program);
+    char *program_path = my_strdupcat("/", program);
 
     for (int i = 0; paths[i]; i++) {
-        attempt = my_strcat(paths[i], program_path);
+        attempt = my_strdupcat(paths[i], program_path);
         if (access(attempt, F_OK) == 0) {
             free(program_path);
+            free(paths[0]);
+            free(paths);
             return attempt;
         }
         free(attempt);
     }
+    free(program_path);
+    free(paths[0]);
+    free(paths);
     if (access(program, F_OK) == 0)
         return program;
-    free(program_path);
     my_perror(program);
     my_perror(": Command not found.\n");
     return NULL;
@@ -58,21 +68,17 @@ bool exec_program(char **command, int len)
     int status = 0;
     char *path = NULL;
 
-    if (!command || len == 0)
-        return false;
-    if (!(path = get_program_path(command[0])))
-        return false;
+    if (!command || len == 0 || !(path = get_program_path(command[0])))
+        return free_command_return(command, false);
     if (access(path, X_OK) == -1 || is_dir(path)) {
         my_perror(path);
         my_perror(": Permission denied.\n");
+        free(command);
         return false;
     }
-    if (!(child_pid = fork()))
-        if (execve(path, command, __environ) == -1) {
-            fprintf(stderr, "%m\n");
-            exit(84);
-        }
+    if (!(child_pid = fork()) && execve(path, command, __environ) == -1)
+        exit_sh(command, 84);
     if (waitpid(child_pid, &status, WUNTRACED) != (pid_t)0)
-        return check_child(status);
-    return true;
+        return free_command_return(command, check_child(status));
+    return free_command_return(command, true);
 }

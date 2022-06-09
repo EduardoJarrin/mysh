@@ -1,13 +1,13 @@
 /*
 ** EPITECH PROJECT, 2021
-** my_strcat
+** my_strdupcat
 ** File description:
 ** concatenates two strings
 */
 
 #include "libmy.h"
 
-char *my_strcat(char *dest, char const *src)
+char *my_strdupcat(char *dest, char const *src)
 {
     char *new = my_strmalloc(my_strlen(dest) + my_strlen(src));
     int i = 0;
@@ -38,7 +38,7 @@ char *my_strncat(char *dest, char const *src, int nb)
     return (dest);
 }
 
-char *my_strconcat(char *dest, char const *src)
+char *my_strcat(char *dest, char const *src)
 {
     int i = 0;
     int size = my_strlen(dest);

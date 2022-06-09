@@ -29,6 +29,6 @@ char **my_arrdup(char **src)
         return arr;
     for (int i = 0; i < len; i++)
         arr[i] = my_strdup(src[i]);
-    arr[len] = (char *)0;
+    arr[len] = NULL;
     return arr;
 }

@@ -35,11 +35,11 @@
     void my_putnbr(int nb);
     void my_putnbr_base(int nb, char *base);
     void my_putstr(char const *str);
-    char *my_strconcat(char *dest, char const *src);
+    char *my_strcat(char *dest, char const *src);
     char *my_strmalloc(int len);
     bool my_str_isalphanum(char const *str);
     char **my_stoa(char *str, char sep);
-    char *my_strcat(char *dest, char const *src);
+    char *my_strdupcat(char *dest, char const *src);
     int my_strcmp(char const *str1, char const *str2);
     char *my_strcpy(char *dest, char const *src);
     char *my_strdup(char const *src);

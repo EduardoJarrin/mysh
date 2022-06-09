@@ -9,13 +9,14 @@ LIB_DIR = lib
 
 LDFLAGS	=	-L$(LIB_DIR) -lmy
 
-CFLAGS	=	-W -Werror -Wall -Wextra
+CFLAGS	=	-W -Werror -Wall -Wextra -Wundef
 
 CFLAGS	+=	-I./include -I$(LIB_DIR)/my/include
 
 SRC_DIR	=	src
 
 SRC	=	$(wildcard $(SRC_DIR)/*.c)
+SRC	+=	$(wildcard $(SRC_DIR)/*/*.c)
 
 OBJ	=	$(SRC:.c=.o)
 
