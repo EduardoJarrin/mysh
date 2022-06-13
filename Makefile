@@ -33,11 +33,11 @@ debugging:
 library:
 	@cd $(LIB_DIR) && make
 
-tests_run:
+tests_run: binary
 	@cd tests && make
 
 cov:
-	@cd tests && make html-details
+	@cd tests && make unit-cov
 
 clean:
 	rm -f $(OBJ)

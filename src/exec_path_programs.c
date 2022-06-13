@@ -17,22 +17,32 @@ bool free_command_return(char **command, bool return_value)
     return return_value;
 }
 
-char *get_program_path(char *program)
+char **get_env_paths(void)
 {
     char *path = get_env_value("PATH");
     char **paths = my_stoa(my_strdup(path), ':');
+
+    if (!(path = get_env_value("PATH")))
+        return NULL;
+    if (!(paths = my_stoa(my_strdup(path), ':')))
+        return NULL;
+    return paths;
+}
+
+char *get_program_path(char *program)
+{
+    char **paths = get_env_paths();
     char *attempt = NULL;
     char *program_path = my_strdupcat("/", program);
 
-    for (int i = 0; paths[i]; i++) {
-        attempt = my_strdupcat(paths[i], program_path);
+    for (int i = 0; paths[i]; free(attempt)) {
+        attempt = my_strdupcat(paths[i++], program_path);
         if (access(attempt, F_OK) == 0) {
             free(program_path);
             free(paths[0]);
             free(paths);
             return attempt;
         }
-        free(attempt);
     }
     free(program_path);
     free(paths[0]);
@@ -59,6 +69,7 @@ bool check_child(int status)
     if (WCOREDUMP(status))
         my_perror(" (core dumped)");
     my_perror("\n");
+    exit_sh(NULL, status);
     return false;
 }
 

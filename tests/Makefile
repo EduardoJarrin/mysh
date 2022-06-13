@@ -2,55 +2,31 @@
 ## EPITECH PROJECT, 2021
 ## Makefile
 ## File description:
-## Makes files
+## Makes file
 ##
 
-TEST	=	unit_tests
+BIN	=	mysh
 
-TEST_SRC	=	$(wildcard src/*.c)
+FUNC_DIR	=	functional-tests
+UNIT_DIR	=	unit-tests
 
-HTML	=	coverage
+all:	unit	functional
 
-LIB_DIR	= $(realpath ../lib)
+functional:
+	cp ../$(BIN) $(FUNC_DIR)
+	cd $(FUNC_DIR) && ./tester.sh
 
-BIN_SRC	=	$(wildcard ../src/*.c)
-BIN_SRC	+=	$(wildcard ../src/*/*.c)
-BIN_SRC	:=	$(filter-out ../src/main.c, $(BIN_SRC))
+unit:
+	@cd $(UNIT_DIR) && make
 
-CCTMP	=	$(BIN_SRC:.c=.gcno) $(BIN_SRC:.c=.gcda) $(BIN_SRC:.c=.gcov) \
-			$(TEST_SRC:.c=.gcno) $(TEST_SRC:.c=.gcda) $(TEST_SRC:.c=.gcov)
-
-CFLAGS = -W -Wall -Wextra -Wno-unknown-pragmas
-CFLAGS += -iquote -I./include -I../include -I$(LIB_DIR)/my/include
-
-LDFLAGS = -lcriterion -lgcov --coverage -g -O0 -lcrypto -L$(LIB_DIR) -lmy
-
-all:	run
-
-library:
-	@cd $(LIB_DIR) && make
-
-tests:	library
-	gcc -o $(TEST) $(TEST_SRC) $(BIN_SRC) $(LDFLAGS) $(CFLAGS)
-
-run:	tests
-	./$(TEST)
-
-html-details: run
-	rm $(TEST)-test-*
-	gcovr -r .. --html-details -o $(HTML).html
+unit-cov:
+	@cd $(UNIT_DIR) && make html-cov
 
 clean:
-	rm -f $(OBJ)
+	@cd $(UNIT_DIR) && make clean
 
-cclean:
-	rm -f $(CCTMP)
-	rm -f $(TEST)-*
-	rm -f $(HTML).*
-
-fclean:	clean	cclean
-	@cd $(LIB_DIR) && make fclean
-	rm -f $(TEST)
-
+fclean:
+	@cd $(FUNC_DIR) && rm -rf $(BIN)
+	@cd $(UNIT_DIR) && make fclean
 
 re:	fclean	all
